@@ -2,13 +2,38 @@
 
 namespace Tests\Feature;
 
-use App\Models\Article;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class ArticleBulkUpsertTest extends TestCase
 {
     use RefreshDatabase;
+
+    /**
+     * リクエストヘッダー
+     *
+     * @var array
+     */
+    protected $headers;
+
+    /**
+     * テスト前処理
+     *
+     * @return void
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        \App\Models\User::factory()->create([
+            'api_token' => hash('sha256', 'test_token'),
+        ]);
+
+        $this->headers = [
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer test_token',
+        ];
+    }
 
     /**
      * 記事の一括登録＆更新 正常系テスト
@@ -24,15 +49,13 @@ class ArticleBulkUpsertTest extends TestCase
         $url = '/api/articles';
 
         if (!empty($storeArticles)) {
-            Article::factory(count($storeArticles))
+            \App\Models\Article::factory(count($storeArticles))
                 ->sequence(...$storeArticles)
                 ->create();
         }
 
         // Act
-        $response = $this->post($url, $commitArticles, [
-            'Accept' => 'application/json',
-        ]);
+        $response = $this->post($url, $commitArticles, $this->headers);
 
         // Assert
         $response->assertStatus(204);
@@ -45,8 +68,8 @@ class ArticleBulkUpsertTest extends TestCase
     public static function bulkUpsert204Provider()
     {
         return [
+            // 記事の一括登録が正常終了すること
             [
-                // 記事の一括登録が正常終了すること
                 'storeArticles' => [],
                 'commitArticles' => [
                     [
@@ -81,8 +104,8 @@ class ArticleBulkUpsertTest extends TestCase
                     ],
                 ],
             ],
+            // 記事の一括更新が正常終了すること
             [
-                // 記事の一括更新が正常終了すること
                 'storeArticles' => [
                     [
                         'id' => '1',
@@ -148,9 +171,7 @@ class ArticleBulkUpsertTest extends TestCase
         $url = '/api/articles';
 
         // Act
-        $response = $this->post($url, $commitData, [
-            'Accept' => 'application/json',
-        ]);
+        $response = $this->post($url, $commitData, $this->headers);
 
         // Assert
         $response->assertStatus(422);

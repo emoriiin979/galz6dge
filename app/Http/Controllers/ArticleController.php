@@ -19,7 +19,7 @@ class ArticleController extends Controller
     /**
      * 新しい記事コントローラインスタンスを作成
      *
-     * @param \App\Services\ArticleService
+     * @param  \App\Services\ArticleService  $service
      * @return void
      */
     public function __construct(ArticleService $service)
@@ -39,7 +39,7 @@ class ArticleController extends Controller
             'entry_ids',
         ]);
 
-        $articles = $this->service->fetchByParams($params);
+        $articles = $this->service->get($params);
 
         return app()->make(ArticleCollection::class, [
             'resource' => $articles,
@@ -49,18 +49,21 @@ class ArticleController extends Controller
     /**
      * 記事の一括登録＆更新
      *
-     * @param \App\Http\Requests\ArticleBulkUpsertRequest
+     * @param  \App\Http\Requests\ArticleBulkUpsertRequest
      * @return \Illuminate\Http\Response
      */
     public function bulkUpsert(ArticleBulkUpsertRequest $request)
     {
-        $commitData = array_map(fn ($value) => [
-            'id' => $value['entry_id'],
-            'title' => $value['title'],
-            'edited_at' => $value['edited_at'],
-            'is_modified' => $value['is_modified'],
-            'body' => $value['body'],
-        ], $request->input());
+        $commitData = array_map(
+            fn ($value) => [
+                'id' => $value['entry_id'],
+                'title' => $value['title'],
+                'edited_at' => $value['edited_at'],
+                'is_modified' => $value['is_modified'],
+                'body' => $value['body'],
+            ],
+            $request->input()
+        );
 
         $this->service->bulkUpsert($commitData);
 
