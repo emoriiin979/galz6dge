@@ -2,13 +2,38 @@
 
 namespace Tests\Feature;
 
-use App\Models\Article;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class ArticleIndexTest extends TestCase
 {
     use RefreshDatabase;
+
+    /**
+     * リクエストヘッダー
+     *
+     * @var array
+     */
+    protected $headers;
+
+    /**
+     * テスト前処理
+     *
+     * @return void
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        \App\Models\User::factory()->create([
+            'api_token' => hash('sha256', 'test_token'),
+        ]);
+
+        $this->headers = [
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer test_token',
+        ];
+    }
 
     /**
      * 記事の一覧取得 正常系テスト
@@ -23,14 +48,12 @@ class ArticleIndexTest extends TestCase
         // Arrange
         $url = '/api/articles' . (empty($params) ? '' : '?' . http_build_query($params));
 
-        Article::factory(count($articles))
+        \App\Models\Article::factory(count($articles))
             ->sequence(...$articles)
             ->create();
 
         // Act
-        $response = $this->get($url, [
-            'Accept' => 'application/json',
-        ]);
+        $response = $this->get($url, $this->headers);
 
         // Assert
         $response->assertStatus(200);
@@ -121,9 +144,7 @@ class ArticleIndexTest extends TestCase
         $url = '/api/articles' . (empty($params) ? '' : '?' . http_build_query($params));
 
         // Act
-        $response = $this->get($url, [
-            'Accept' => 'application/json',
-        ]);
+        $response = $this->get($url, $this->headers);
 
         // Assert
         $response->assertStatus(422);

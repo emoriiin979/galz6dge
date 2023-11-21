@@ -10,14 +10,14 @@ class ArticleService
     /**
      * 記事モデルオブジェクト
      *
-     * @var \App\Models\Article
+     * @var  \App\Models\Article
      */
     protected $model;
 
     /**
      * 新しい記事サービスインスタンスを作成
      *
-     * @param \App\Models\Article
+     * @param  \App\Models\Article  $model
      * @return void
      */
     public function __construct(Article $model)
@@ -31,7 +31,7 @@ class ArticleService
      * @param array $params
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function fetchByParams($params)
+    public function get($params)
     {
         $query = $this->model->query();
 
@@ -40,7 +40,7 @@ class ArticleService
         }
 
         $query->orderBy('edited_at', 'desc');
-        $query->limit(config('my.limit', 1000));
+        $query->limit(config('app.max_count', 1000));
 
         return $query->get();
     }
@@ -48,11 +48,11 @@ class ArticleService
     /**
      * 記事の一括登録＆更新
      *
-     * @param array $commitData
+     * @param  array  $commitData
      * @return void
      */
     public function bulkUpsert($commitData)
     {
-        return $this->model->upsert($commitData, ['id']);
+        $this->model->upsert($commitData, ['id']);
     }
 }

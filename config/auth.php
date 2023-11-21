@@ -40,6 +40,12 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'api' => [
+            'driver' => 'token',
+            'provider' => 'users',
+            'input_key' => 'auth_input_key',
+            'hash' => true,
+        ],
     ],
 
     /*
@@ -111,5 +117,13 @@ return [
     */
 
     'password_timeout' => 10800,
+
+    /*
+    |--------------------------------------------------------------------------
+    | その他 認証設定
+    |--------------------------------------------------------------------------
+    */
+
+    'default_password' => env('DEFAULT_PASSWORD', 'password'),
 
 ];
