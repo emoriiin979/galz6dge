@@ -24,6 +24,7 @@ class UserStoreRequest extends FormRequest
         return [
             'name' => ['required', 'string'],
             'email' => ['required', 'email'],
+            'password' => ['string'],
             'api_token' => ['required', 'string'],
         ];
     }
@@ -36,7 +37,21 @@ class UserStoreRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'api_token' => 'api_token',0
+            'api_token' => 'api_token',
         ];
+    }
+
+    /**
+     * バリデーション後処理
+     *
+     * @return void
+     */
+    protected function passedValidation(): void
+    {
+        if (is_null($this->password)) {
+            $this->merge([
+                'password' => config('auth.default_password'),
+            ]);
+        }
     }
 }

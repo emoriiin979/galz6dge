@@ -3,6 +3,8 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 class UserStoreTest extends TestCase
@@ -80,13 +82,13 @@ class UserStoreTest extends TestCase
                 'commitData' => [
                     'name' => 'general user',
                     'email' => 'general@gmail.com',
-                    'password' => 'password',
                     'api_token' => 'general',
                 ],
                 'expected' => [
                     'name' => 'general user',
                     'email' => 'general@gmail.com',
                     'api_token' => hash('sha256', 'general'),
+                    'role' => null,
                 ],
             ],
         ];
@@ -139,6 +141,7 @@ class UserStoreTest extends TestCase
                 'commitData' => [
                     'name' => ['name'],
                     'email' => 'aaaa',
+                    'password' => ['password'],
                     'api_token' => ['api_token'],
                 ],
                 'assertFunc' => function ($json) {
@@ -149,6 +152,9 @@ class UserStoreTest extends TestCase
                             ],
                             'email' => [
                                 'emailには、有効なメールアドレスを指定してください。',
+                            ],
+                            'password' => [
+                                'passwordは文字列を指定してください。',
                             ],
                             'api_token' => [
                                 'api_tokenは文字列を指定してください。',
