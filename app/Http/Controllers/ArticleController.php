@@ -6,21 +6,21 @@ use App\Http\Requests\ArticleBulkUpsertRequest;
 use App\Http\Requests\ArticleIndexRequest;
 use App\Http\Resources\ArticleCollection;
 use App\Services\ArticleService;
+use Illuminate\Http\Response;
 
 class ArticleController extends Controller
 {
     /**
      * 記事サービスオブジェクト
      *
-     * @var \App\Services\ArticleService
+     * @var ArticleService
      */
     protected $service;
 
     /**
      * 新しい記事コントローラインスタンスを作成
      *
-     * @param  \App\Services\ArticleService  $service
-     * @return void
+     * @param ArticleService $service
      */
     public function __construct(ArticleService $service)
     {
@@ -30,10 +30,10 @@ class ArticleController extends Controller
     /**
      * 記事の一覧取得
      *
-     * @param \App\Http\Requests\ArticleIndexRequest
-     * @return \App\Http\Resources\ArticleCollection
+     * @param ArticleIndexRequest $request
+     * @return ArticleCollection
      */
-    public function index(ArticleIndexRequest $request)
+    public function index(ArticleIndexRequest $request): ArticleCollection
     {
         $params = $request->only([
             'entry_ids',
@@ -49,10 +49,10 @@ class ArticleController extends Controller
     /**
      * 記事の一括登録＆更新
      *
-     * @param  \App\Http\Requests\ArticleBulkUpsertRequest
-     * @return \Illuminate\Http\Response
+     * @param ArticleBulkUpsertRequest $request
+     * @return Response
      */
-    public function bulkUpsert(ArticleBulkUpsertRequest $request)
+    public function bulkUpsert(ArticleBulkUpsertRequest $request): Response
     {
         $commitData = array_map(
             fn ($value) => [

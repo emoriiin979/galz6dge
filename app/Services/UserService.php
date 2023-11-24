@@ -9,15 +9,14 @@ class UserService
     /**
      * ユーザーモデルオブジェクト
      *
-     * @var  \App\Models\User
+     * @var User
      */
     protected $model;
 
     /**
      * 新しいユーザーサービスインスタンスを作成
      *
-     * @param  \App\Models\User  $model
-     * @return void
+     * @param User $model
      */
     public function __construct(User $model)
     {
@@ -27,10 +26,10 @@ class UserService
     /**
      * ユーザーの登録
      *
-     * @param  array  $commitData
+     * @param array $commitData
      * @return void
      */
-    public function create($commitData)
+    public function create(array $commitData): void
     {
         $commitData = array_merge($commitData, [
             'api_token' => hash('sha256', $commitData['api_token']),

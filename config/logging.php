@@ -1,5 +1,7 @@
 <?php
 
+use App\Loggers\DbLogFormatter;
+use App\Loggers\DbLogHandler;
 use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogUdpHandler;
@@ -125,6 +127,13 @@ return [
 
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
+        ],
+
+        'db' => [
+            'driver' => 'monolog',
+            'handler' => DbLogHandler::class,
+            'level' => env('LOG_LEVEL', 'debug'),
+            'formatter' => DbLogFormatter::class
         ],
     ],
 

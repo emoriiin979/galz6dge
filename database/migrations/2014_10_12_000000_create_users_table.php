@@ -20,7 +20,8 @@ return new class extends Migration
             $table->string('api_token', 80)->unique()->nullable();
             $table->string('role', 16)->nullable();
             $table->rememberToken();
-            $table->timestamps();
+            $table->dateTime('created_at')->nullable();
+            $table->dateTime('updated_at')->nullable();
         });
     }
 

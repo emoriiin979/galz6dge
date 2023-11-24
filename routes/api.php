@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\LogController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -25,6 +26,10 @@ Route::middleware('auth:api')->group(function () {
     Route::prefix('/articles')->group(function () {
         Route::get('/', [ArticleController::class, 'index']);
         Route::post('/', [ArticleController::class, 'bulkUpsert']);
+    });
+    Route::prefix('/logs')->group(function () {
+        Route::get('/', [LogController::class, 'index']);
+        Route::post('/', [LogController::class, 'store']);
     });
 });
 
