@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Article;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response;
 
 class ArticleService
@@ -10,15 +11,14 @@ class ArticleService
     /**
      * 記事モデルオブジェクト
      *
-     * @var  \App\Models\Article
+     * @var Article
      */
     protected $model;
 
     /**
      * 新しい記事サービスインスタンスを作成
      *
-     * @param  \App\Models\Article  $model
-     * @return void
+     * @param Article $model
      */
     public function __construct(Article $model)
     {
@@ -29,9 +29,9 @@ class ArticleService
      * 記事の一覧取得
      *
      * @param array $params
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @return Collection
      */
-    public function get($params)
+    public function get(array $params): Collection
     {
         $query = $this->model->query();
 
@@ -48,10 +48,10 @@ class ArticleService
     /**
      * 記事の一括登録＆更新
      *
-     * @param  array  $commitData
+     * @param array $commitData
      * @return void
      */
-    public function bulkUpsert($commitData)
+    public function bulkUpsert(array $commitData): void
     {
         $this->model->upsert($commitData, ['id']);
     }

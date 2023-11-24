@@ -2,6 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Models\Article;
+use App\Models\User;
+use Closure;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -12,7 +15,7 @@ class ArticleIndexTest extends TestCase
     /**
      * リクエストヘッダー
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $headers;
 
@@ -25,7 +28,7 @@ class ArticleIndexTest extends TestCase
     {
         parent::setUp();
 
-        \App\Models\User::factory()->create([
+        User::factory()->create([
             'api_token' => hash('sha256', 'test_token'),
         ]);
 
@@ -41,14 +44,14 @@ class ArticleIndexTest extends TestCase
      * @dataProvider index200Provider
      * @param array $params
      * @param array $articles
-     * @param \Closure $assertFunc
+     * @param Closure $assertFunc
      */
-    public function test_200_index($params, $articles, $assertFunc)
+    public function test_200_index(array $params, array $articles, Closure $assertFunc)
     {
         // Arrange
-        $url = '/api/articles' . (empty($params) ? '' : '?' . http_build_query($params));
+        $url = '/api/articles?' . http_build_query($params);
 
-        \App\Models\Article::factory(count($articles))
+        Article::factory(count($articles))
             ->sequence(...$articles)
             ->create();
 
@@ -136,12 +139,13 @@ class ArticleIndexTest extends TestCase
      *
      * @dataProvider index422Provider
      * @param array $params
-     * @param \Closure $assertFunc
+     * @param Closure $assertFunc
+     * @return void
      */
     public function test_422_index($params, $assertFunc)
     {
         // Arrange
-        $url = '/api/articles' . (empty($params) ? '' : '?' . http_build_query($params));
+        $url = '/api/articles?' . http_build_query($params);
 
         // Act
         $response = $this->get($url, $this->headers);

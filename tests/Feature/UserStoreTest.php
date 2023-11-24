@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Models\User;
+use Closure;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
@@ -27,7 +29,7 @@ class UserStoreTest extends TestCase
     {
         parent::setUp();
 
-        \App\Models\User::factory()->create([
+        User::factory()->create([
             'api_token' => hash('sha256', 'test_token'),
             'role' => 'master',
         ]);
@@ -44,8 +46,9 @@ class UserStoreTest extends TestCase
      * @dataProvider store201Provider
      * @param array $commitData
      * @param array $expected
+     * @return void
      */
-    public function test_201_store($commitData, $expected)
+    public function test_201_store(array $commitData, array $expected): void
     {
         // Arrange
         $url = '/api/users';
@@ -99,9 +102,9 @@ class UserStoreTest extends TestCase
      *
      * @dataProvider store422Provider
      * @param array $commitData
-     * @param \Closure $assertFunc
+     * @param Closure $assertFunc
      */
-    public function test_422_store($commitData, $assertFunc)
+    public function test_422_store(array $commitData, Closure $assertFunc)
     {
         // Arrange
         $url = '/api/users';

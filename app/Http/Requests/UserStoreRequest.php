@@ -2,20 +2,12 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\BaseRequest;
 
-class UserStoreRequest extends FormRequest
+class UserStoreRequest extends BaseRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
-    {
-        return true;
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
+     * バリデーションルール
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
@@ -26,18 +18,6 @@ class UserStoreRequest extends FormRequest
             'email' => ['required', 'email'],
             'password' => ['string'],
             'api_token' => ['required', 'string'],
-        ];
-    }
-
-    /**
-     * 属性名
-     *
-     * @return array<string, string>
-     */
-    public function attributes(): array
-    {
-        return [
-            'api_token' => 'api_token',
         ];
     }
 
