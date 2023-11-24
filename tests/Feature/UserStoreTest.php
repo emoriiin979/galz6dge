@@ -5,8 +5,6 @@ namespace Tests\Feature;
 use App\Models\User;
 use Closure;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 class UserStoreTest extends TestCase
@@ -61,7 +59,12 @@ class UserStoreTest extends TestCase
         $this->assertDatabaseHas('users', $expected);
     }
 
-    public static function store201Provider()
+    /**
+     * ユーザーの登録 正常データ作成
+     *
+     * @return array
+     */
+    public static function store201Provider(): array
     {
         return [
             // role指定あり
@@ -103,8 +106,9 @@ class UserStoreTest extends TestCase
      * @dataProvider store422Provider
      * @param array $commitData
      * @param Closure $assertFunc
+     * @return void
      */
-    public function test_422_store(array $commitData, Closure $assertFunc)
+    public function test_422_store(array $commitData, Closure $assertFunc): void
     {
         // Arrange
         $url = '/api/users';
@@ -117,7 +121,12 @@ class UserStoreTest extends TestCase
         $response->assertJson($assertFunc);
     }
 
-    public static function store422Provider()
+    /**
+     * ユーザーの登録 422異常データ作成
+     *
+     * @return array
+     */
+    public static function store422Provider(): array
     {
         return [
             // requiredのバリデーションが有効であること
@@ -143,7 +152,7 @@ class UserStoreTest extends TestCase
             [
                 'commitData' => [
                     'name' => ['name'],
-                    'email' => 'aaaa',
+                    'email' => ['aaaa'],
                     'password' => ['password'],
                     'api_token' => ['api_token'],
                 ],
@@ -154,13 +163,30 @@ class UserStoreTest extends TestCase
                                 'nameは文字列を指定してください。',
                             ],
                             'email' => [
-                                'emailには、有効なメールアドレスを指定してください。',
+                                'emailは文字列を指定してください。',
                             ],
                             'password' => [
                                 'passwordは文字列を指定してください。',
                             ],
                             'api_token' => [
                                 'api_tokenは文字列を指定してください。',
+                            ],
+                        ])
+                        ->etc();
+                },
+            ],
+            // 形式バリデーションが有効であること
+            [
+                'commitData' => [
+                    'name' => 'Test User',
+                    'email' => 'aaaa',
+                    'api_token' => 'cy4vuybin8jm3kxrcy5tvb67hynj',
+                ],
+                'assertFunc' => function ($json) {
+                    $json
+                        ->where('errors', [
+                            'email' => [
+                                'emailには、有効なメールアドレスを指定してください。',
                             ],
                         ])
                         ->etc();

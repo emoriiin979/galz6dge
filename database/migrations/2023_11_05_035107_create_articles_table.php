@@ -12,13 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('articles', function (Blueprint $table) {
-            $table->string('id', 32)->comment('記事ID');
-            $table->string('title', 128)->comment('タイトル');
-            $table->dateTime('edited_at')->comment('編集日時');
-            $table->boolean('is_modified')->default(false)->comment('整形済みフラグ');
-            $table->longText('body')->nullable()->comment('ボディ');
-            $table->dateTime('created_at')->nullable()->comment('登録日時');
-            $table->dateTime('updated_at')->nullable()->comment('更新日時');
+            $table->string('id', 32);
+            $table->string('title', 128);
+            $table->dateTime('edited_at');
+            $table->boolean('is_modified')->default(false);
+            $table->longText('body')->nullable();
+            $table->dateTime('created_at')->nullable();
+            $table->dateTime('updated_at')->nullable();
             $table->primary('id');
         });
     }

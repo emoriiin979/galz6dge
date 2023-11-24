@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\Article;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Http\Response;
 
 class ArticleService
 {

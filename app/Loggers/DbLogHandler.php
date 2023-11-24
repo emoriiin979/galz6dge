@@ -2,9 +2,7 @@
 
 namespace App\Loggers;
 
-use App\Loggers\DbLogFormatter;
 use App\Models\Log as LogModel;
-use Monolog\Formatter\FormatterInterface;
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\LogRecord;
 

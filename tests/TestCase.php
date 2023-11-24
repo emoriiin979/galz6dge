@@ -17,6 +17,6 @@ abstract class TestCase extends BaseTestCase
     public function setUp(): void
     {
         parent::setUp();
-        Carbon::setTestNow(Carbon::create(2024, 12, 23, 12, 34, 56));
+        Carbon::setTestNow(Carbon::parse('2024-12-23 12:34:56'));
     }
 }

@@ -45,8 +45,9 @@ class ArticleIndexTest extends TestCase
      * @param array $params
      * @param array $articles
      * @param Closure $assertFunc
+     * @return void
      */
-    public function test_200_index(array $params, array $articles, Closure $assertFunc)
+    public function test_200_index(array $params, array $articles, Closure $assertFunc): void
     {
         // Arrange
         $url = '/api/articles?' . http_build_query($params);
@@ -63,7 +64,12 @@ class ArticleIndexTest extends TestCase
         $response->assertJson($assertFunc);
     }
 
-    public static function index200Provider()
+    /**
+     * 記事の一覧取得 正常データ作成
+     *
+     * @return array
+     */
+    public static function index200Provider(): array
     {
         return [
             // レスポンスデータが正しく取得できていること
@@ -142,7 +148,7 @@ class ArticleIndexTest extends TestCase
      * @param Closure $assertFunc
      * @return void
      */
-    public function test_422_index($params, $assertFunc)
+    public function test_422_index(array $params, Closure $assertFunc): void
     {
         // Arrange
         $url = '/api/articles?' . http_build_query($params);
@@ -155,7 +161,12 @@ class ArticleIndexTest extends TestCase
         $response->assertJson($assertFunc);
     }
 
-    public static function index422Provider()
+    /**
+     * 記事の一覧取得 422異常データ作成
+     *
+     * @return array
+     */
+    public static function index422Provider(): array
     {
         return [
             // entry_idsのバリデーションが有効であること

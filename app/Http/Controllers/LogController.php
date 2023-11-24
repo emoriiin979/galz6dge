@@ -6,7 +6,6 @@ use App\Http\Requests\LogIndexRequest;
 use App\Http\Requests\LogStoreRequest;
 use App\Http\Resources\LogCollection;
 use App\Services\LogService;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class LogController extends Controller

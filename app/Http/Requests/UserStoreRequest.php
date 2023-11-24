@@ -15,7 +15,7 @@ class UserStoreRequest extends BaseRequest
     {
         return [
             'name' => ['required', 'string'],
-            'email' => ['required', 'email'],
+            'email' => ['bail', 'required', 'string', 'email'],
             'password' => ['string'],
             'api_token' => ['required', 'string'],
         ];

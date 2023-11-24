@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Models\Log as LogModel;
 use App\Models\User;
-use Carbon\Carbon;
 use Closure;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -28,8 +27,6 @@ class LogIndexTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-
-        Carbon::setTestNow(Carbon::parse('2024-12-23 12:34:56'));
 
         User::factory()->create([
             'api_token' => hash('sha256', 'test_token'),
@@ -248,7 +245,7 @@ class LogIndexTest extends TestCase
      * @param Closure $assertFunc
      * @return void
      */
-    public function test_422_index($params, $assertFunc)
+    public function test_422_index(array $params, Closure $assertFunc): void
     {
         // Arrange
         $url = '/api/logs?' . http_build_query($params);

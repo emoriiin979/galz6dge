@@ -2,6 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Models\Article;
+use App\Models\User;
+use Closure;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -25,7 +28,7 @@ class ArticleBulkUpsertTest extends TestCase
     {
         parent::setUp();
 
-        \App\Models\User::factory()->create([
+        User::factory()->create([
             'api_token' => hash('sha256', 'test_token'),
         ]);
 
@@ -42,14 +45,15 @@ class ArticleBulkUpsertTest extends TestCase
      * @param array $storeArticles
      * @param array $commitArticles
      * @param array $assertData
+     * @return void
      */
-    public function test_204_bulkUpsert($storeArticles, $commitArticles, $assertData)
+    public function test_204_bulkUpsert(array $storeArticles, array $commitArticles, array $assertData): void
     {
         // Arrange
         $url = '/api/articles';
 
         if (!empty($storeArticles)) {
-            \App\Models\Article::factory(count($storeArticles))
+            Article::factory(count($storeArticles))
                 ->sequence(...$storeArticles)
                 ->create();
         }
@@ -65,7 +69,12 @@ class ArticleBulkUpsertTest extends TestCase
         }
     }
 
-    public static function bulkUpsert204Provider()
+    /**
+     * 記事の一括登録＆更新 正常データ作成
+     *
+     * @return array
+     */
+    public static function bulkUpsert204Provider(): array
     {
         return [
             // 記事の一括登録が正常終了すること
@@ -163,9 +172,10 @@ class ArticleBulkUpsertTest extends TestCase
      *
      * @dataProvider bulkUpsert422Provider
      * @param array $commitData
-     * @param \Closure $assertFunc
+     * @param Closure $assertFunc
+     * @return void
      */
-    public function test_422_bulkUpsert($commitData, $assertFunc)
+    public function test_422_bulkUpsert(array $commitData, Closure $assertFunc): void
     {
         // Arrange
         $url = '/api/articles';
@@ -178,7 +188,12 @@ class ArticleBulkUpsertTest extends TestCase
         $response->assertJson($assertFunc);
     }
 
-    public static function bulkUpsert422Provider()
+    /**
+     * 記事の一括登録＆更新 422異常データ作成
+     *
+     * @return array
+     */
+    public static function bulkUpsert422Provider(): array
     {
         return [
             // requiredのバリデーションが有効であること

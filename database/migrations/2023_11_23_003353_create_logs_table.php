@@ -19,7 +19,8 @@ return new class extends Migration
             $table->string('key', 64);
             $table->integer('response_code');
             $table->string('message', 256)->nullable();
-            $table->timestamps();
+            $table->dateTime('created_at')->nullable();
+            $table->dateTime('updated_at')->nullable();
         });
     }
 
