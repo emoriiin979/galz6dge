@@ -24,6 +24,18 @@ services:
         depends_on:
             - mysql
             - mailpit
+    python:
+        build:
+            context: ./docker/python312
+            dockerfile: Dockerfile
+        volumes:
+            - './resources/python:/usr/src/app'
+        tty: true
+        networks:
+            - sail
+        depends_on:
+            - laravel
+            - mysql
     mysql:
         image: 'mysql/mysql-server:8.0'
         ports:
