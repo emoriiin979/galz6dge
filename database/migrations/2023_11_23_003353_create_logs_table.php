@@ -18,9 +18,8 @@ return new class extends Migration
             $table->string('url', 256);
             $table->string('key', 64);
             $table->integer('response_code');
-            $table->string('message', 256)->nullable();
+            $table->text('message');
             $table->dateTime('created_at')->nullable();
-            $table->dateTime('updated_at')->nullable();
         });
     }
 
